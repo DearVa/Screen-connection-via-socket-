@@ -1,0 +1,83 @@
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1"/> 
+<style type="text/css">
+    html, body {
+    overflow: hidden;
+    height: 100%;
+}
+</style>
+<button style="width: 300px; height: 120px; border: none; position: absolute; top: 0px; left: -300px; outline: none; background-color: transparent; background-image: url('paste yur image url here');" draggable="true" id="b"></button>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+var socket = io.connect();
+var sender = false;
+var first = true;
+socket.on("message", function (data) {  // 服务器发来信息
+    if (!sender) {
+        b.style.left = data.left - deltaH;
+        b.style.top = data.top;
+    }
+});
+window.onload = function () {
+    var b = document.getElementById("b");
+    var startX, startY;
+    var height = document.body.clientHeight;
+    var width = document.body.clientWidth;
+    console.log(deltaH);
+    b.style.left = -deltaH;
+    socket.emit("dh", width);
+    var img = new Image(); 
+    img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAABJ0AAASdAHeZh94AAAE92lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMC0wMi0xNlQwMDowOTozMCswODowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMC0wMi0xNlQwMDowOTozMCswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjAtMDItMTZUMDA6MDk6MzArMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmNmMjk4NTIwLTU0MmYtNWM0Yy04NjQzLTE3NDY0NWEzM2YxNyIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjQ5YjNhNjNhLTVjZjEtZWQ0OS04MzA5LTU5MWU4YmIzNTU2YyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOmNmMjk4NTIwLTU0MmYtNWM0Yy04NjQzLTE3NDY0NWEzM2YxNyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyI+IDx4bXBNTTpIaXN0b3J5PiA8cmRmOlNlcT4gPHJkZjpsaSBzdEV2dDphY3Rpb249ImNyZWF0ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6Y2YyOTg1MjAtNTQyZi01YzRjLTg2NDMtMTc0NjQ1YTMzZjE3IiBzdEV2dDp3aGVuPSIyMDIwLTAyLTE2VDAwOjA5OjMwKzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgQ0MgKFdpbmRvd3MpIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Prxbc90AAAANSURBVAhbY/j//z8DAAj8Av45Uu27AAAAAElFTkSuQmCC"; 
+    b.addEventListener("dragstart", function (e) {
+        sender = true;
+        e.dataTransfer.setDragImage(img, 0, 0);
+        startX = e.pageX - parseInt(b.style.left);
+        startY = e.pageY - parseInt(b.style.top);
+    });
+    b.addEventListener("drag", function (e) {
+        var left, top;
+        console.log(e);
+        if (e.pageX != 0) {
+            left = e.pageX - startX;
+            top = e.pageY - startY;
+            b.style.left = left;
+            b.style.top = top;
+            socket.emit("pos", {
+                "left": left + deltaH,
+                "top": top
+            });
+        }
+        // if (left < 0) left = 0;
+        // else if (left > width - 300) left = width - 300;
+        // if (top < 0) top = 0;
+        // else if (top > height - 300) top = height - 300;
+    });
+    b.addEventListener("dragend", function (e) {
+        sender = false;
+    });
+    b.addEventListener("touchstart", function (e) {
+        sender = true;
+        startX = e.changedTouches[0].pageX - parseInt(b.style.left);
+        startY = e.changedTouches[0].pageY - parseInt(b.style.top);
+    });
+    b.addEventListener("touchmove", function (e) {
+        var left, top;
+        if (e.pageX != 0) {
+            left = e.changedTouches[0].pageX - startX;
+            top = e.changedTouches[0].pageY - startY;
+            b.style.left = left;
+            b.style.top = top;
+            socket.emit("pos", {
+                "left": left + deltaH,
+                "top": top
+            });
+        }
+        // if (left < 0) left = 0;
+        // else if (left > width - 300) left = width - 300;
+        // if (top < 0) top = 0;
+        // else if (top > height - 300) top = height - 300;  
+    });
+    b.addEventListener("touchend", function (e) {
+        sender = false;
+    });
+}
+</script>
